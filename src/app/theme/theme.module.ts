@@ -5,8 +5,6 @@ import { BackgroundDataService as BackgroundDataServiceV1 } from './infrastructu
 import { BackgroundDataService as BackgroundDataServiceV2 } from './infrastructure/background-data-v2.service';
 import { BorderService } from './services/border.service';
 import { BorderDataService } from './infrastructure/border-data.service';
-import {BackgroundServiceInterface} from "./interfaces/background-service.interface";
-import {BackgroundDataServiceInterface} from "./interfaces/background-data-service.interface";
 
 interface ThemeProviders {
   backgroundService: 'v1' | 'v2';
@@ -21,21 +19,15 @@ export class ThemeModule {
     return {
       ngModule: ThemeModule,
       providers: [
+        BorderService,
+        BackgroundService,
         {
-          provide: THEME_INJECTION_TOKENS.backgroundService,
-          useClass: BackgroundService,
+          provide: THEME_INJECTION_TOKENS.borderDataService,
+          useClass: BorderDataService,
         },
         {
           provide: THEME_INJECTION_TOKENS.backgroundDataService,
           useClass: getBackgroundServiceProvider(providers?.backgroundService)
-        },
-        {
-          provide: THEME_INJECTION_TOKENS.borderService,
-          useClass: BorderService,
-        },
-        {
-          provide: THEME_INJECTION_TOKENS.borderDataService,
-          useClass: BorderDataService,
         },
       ],
     };

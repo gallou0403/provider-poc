@@ -2,6 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {THEME_INJECTION_TOKENS} from "../theme/constants/theme-injection-tokens.const";
 import {BackgroundServiceInterface} from "../theme/interfaces/background-service.interface";
 import {BorderServiceInterface} from "../theme/interfaces/border-service.interface";
+import {BackgroundService} from "../theme/services/background.service";
+import {BorderService} from "../theme/services/border.service";
 
 @Component({
   selector: 'app-lazy-c',
@@ -13,10 +15,8 @@ export class LazyCComponent implements OnInit {
   borderColor = this.borderService.getBorder();
 
   constructor(
-    @Inject(THEME_INJECTION_TOKENS.backgroundService)
-    private backgroundService: BackgroundServiceInterface,
-    @Inject(THEME_INJECTION_TOKENS.borderService)
-    private borderService: BorderServiceInterface
+    private backgroundService: BackgroundService,
+    private borderService: BorderService
   ) { }
 
   ngOnInit(): void {
