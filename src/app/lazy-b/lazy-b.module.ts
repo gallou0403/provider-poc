@@ -1,8 +1,16 @@
-import { NgModule } from '@angular/core';
+import {Inject, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LazyBComponent } from './lazy-b.component';
 import {ThemeModule} from "../theme/theme.module";
 import {RouterModule} from "@angular/router";
+import {BackgroundService} from "../theme/services/background.service";
+import {BackgroundServiceInterface} from "../theme/interfaces/background-service.interface";
+
+export class MockBackgroundService implements BackgroundServiceInterface {
+  getBackground() {
+    return 'purple';
+  }
+}
 
 @NgModule({
   declarations: [
@@ -19,6 +27,12 @@ import {RouterModule} from "@angular/router";
         component: LazyBComponent
       }
     ])
+  ],
+  providers: [
+    {
+      provide: BackgroundService,
+      useClass: MockBackgroundService
+    }
   ]
 })
 export class LazyBModule { }
