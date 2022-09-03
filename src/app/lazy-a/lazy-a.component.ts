@@ -17,7 +17,8 @@ export class LazyAComponent implements OnInit {
   constructor(
     private backgroundService: BackgroundService,
     private borderService: BorderService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
   }
