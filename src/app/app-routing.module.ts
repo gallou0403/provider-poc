@@ -6,15 +6,15 @@ import {RouterModule} from "@angular/router";
     RouterModule.forRoot([
       {
         path: 'a',
-        loadChildren: () => import('./lazy-a/lazy-a.module').then(m => m.LazyAModule)
+        loadChildren: () => import('./provider-test/lazy-a/lazy-a.module').then(m => m.LazyAModule)
       },
       {
         path: 'b',
-        loadChildren: () => import('./lazy-b/lazy-b.module').then(m => m.LazyBModule)
+        loadChildren: () => import('./provider-test/lazy-b/lazy-b.module').then(m => m.LazyBModule)
       },
       {
         path: 'c',
-        loadChildren: () => import('./lazy-c/lazy-c.module').then(m => m.LazyCModule)
+        loadChildren: () => import('./provider-test/lazy-c/lazy-c.module').then(m => m.LazyCModule)
       },
       {
         path: 'heroes',
