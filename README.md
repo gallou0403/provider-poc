@@ -25,3 +25,12 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## TODO:
+- add some basic styling
+- turn detail page into an editable form that updates hero
+- allow deletion of hero from both pages
+- allow creation of new heroes
+- proper error handling
+- show loading spinner
+- refactor to use a custom id

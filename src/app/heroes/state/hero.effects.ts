@@ -6,6 +6,7 @@ import {catchError, debounceTime, EMPTY, exhaustMap, filter, map, switchMap} fro
 import {Store} from "@ngrx/store";
 import {HeroState} from "./hero.reducers";
 import {selectDetailHero} from "./hero.selectors";
+import {HEROES_PAGE_ENTER, HEROES_SEARCH} from "./hero-action-types.const";
 
 @Injectable()
 export class HeroEffects {
@@ -17,7 +18,7 @@ export class HeroEffects {
 
   loadHeroes$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(HeroActions.HEROES_PAGE_ENTER),
+      ofType(HEROES_PAGE_ENTER),
       exhaustMap(() =>
         this.heroService.getHeroes()
           .pipe(
@@ -32,7 +33,7 @@ export class HeroEffects {
 
   searchHeroes$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(HeroActions.HEROES_SEARCH),
+      ofType(HEROES_SEARCH),
       debounceTime(500),
       switchMap(({query}) =>
         this.heroService.getHeroes(query)
