@@ -21,7 +21,7 @@ import {RouterModule} from "@angular/router";
         loadChildren: () => import('./heroes/hero-list/hero-list.module').then(m => m.HeroListModule)
       },
       {
-        path: 'heroes/:id',
+        path: 'heroes/:heroId',
         loadChildren: () => import('./heroes/hero-detail/hero-detail.module').then(m => m.HeroDetailModule)
       }
     ])

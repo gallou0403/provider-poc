@@ -1,3 +1,4 @@
+<input #searchInput type="text" (keyup)="search(searchInput.value)">
 <ul>
   <li *ngFor="let hero of heroes$ | async">
     <a [routerLink]="[hero.id]">{{hero.name}}</a>

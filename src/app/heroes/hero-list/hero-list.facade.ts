@@ -4,11 +4,17 @@ import {heroAdapter, HeroState} from "../state/hero.reducers";
 import * as HeroActions from '../state/hero.actions';
 import {selectAllHeroes} from "../state/hero.selectors";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class HeroListFacade {
   heroes$ = this.store.select(selectAllHeroes);
 
   constructor(private store: Store<HeroState>) {
     this.store.dispatch(HeroActions.heroesPageEnter())
+  }
+
+  search(query: string = '') {
+    this.store.dispatch(HeroActions.heroesSearch({query}));
   }
 }

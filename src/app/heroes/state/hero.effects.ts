@@ -2,13 +2,17 @@ import {Injectable} from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import {HeroDataService} from "../../data-access/heroes/hero-data.service";
 import * as HeroActions from './hero.actions';
-import {catchError, EMPTY, exhaustMap, map} from "rxjs";
+import {catchError, debounceTime, EMPTY, exhaustMap, filter, map, switchMap} from "rxjs";
+import {Store} from "@ngrx/store";
+import {HeroState} from "./hero.reducers";
+import {selectDetailHero} from "./hero.selectors";
 
 @Injectable()
 export class HeroEffects {
   constructor(
     private heroService: HeroDataService,
-    private actions$: Actions) {
+    private actions$: Actions,
+    private store: Store<HeroState>) {
   }
 
   loadHeroes$ = createEffect(() =>
@@ -29,7 +33,8 @@ export class HeroEffects {
   searchHeroes$ = createEffect(() =>
     this.actions$.pipe(
       ofType(HeroActions.HEROES_SEARCH),
-      exhaustMap(({query}) =>
+      debounceTime(500),
+      switchMap(({query}) =>
         this.heroService.getHeroes(query)
           .pipe(
             map((heroes) => HeroActions.heroesLoaded({heroes})),
@@ -39,5 +44,23 @@ export class HeroEffects {
             })
           )
       )
+    ));
+
+  loadDetailHero$ = createEffect(() =>
+    this.store.select(selectDetailHero).pipe(
+      filter(({id}) => !!id),
+      switchMap(({detailHero, id}) => {
+        if (!detailHero) {
+          return this.heroService.getHero(Number(id)).pipe(
+            map(remoteHero => HeroActions.detailHeroLoaded({detailHero: remoteHero})),
+            catchError(e => {
+              HeroActions.detailHeroError({error: e.message});
+              return EMPTY;
+            })
+          )
+        } else {
+          return EMPTY;
+        }
+      })
     ));
 }

@@ -5,6 +5,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
 
 @NgModule({
@@ -12,10 +13,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
   imports: [
     BrowserAnimationsModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([]),
-    StoreDevtoolsModule.instrument()
 
+    StoreModule.forRoot({
+      router: routerReducer
+    }, {}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument(),
+    StoreRouterConnectingModule.forRoot(),
   ],
   bootstrap: [AppComponent],
 })

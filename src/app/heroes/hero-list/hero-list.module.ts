@@ -4,9 +4,6 @@ import { HeroListComponent } from './hero-list.component';
 import {RouterModule} from "@angular/router";
 import {StateModule} from "../state/state.module";
 import {HeroesDataAccessModule} from "../../data-access/heroes/heroes-data-access.module";
-import {HeroListFacade} from "./hero-list.facade";
-
-
 
 @NgModule({
   declarations: [
@@ -24,9 +21,6 @@ import {HeroListFacade} from "./hero-list.facade";
     HeroesDataAccessModule.forRoot({
       heroService: 'v1'
     })
-  ],
-  providers: [
-    HeroListFacade
   ]
 })
 export class HeroListModule { }

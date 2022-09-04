@@ -4,6 +4,8 @@ import {map, Observable, timer} from "rxjs";
 import {clone, update} from "ramda";
 import {HeroDto} from "./hero-dto.model";
 
+const TIMEOUT = 500;
+
 @Injectable()
 export class HeroService {
   _heroes: HeroDto[];
@@ -13,7 +15,7 @@ export class HeroService {
   }
 
   fetchHeroes(query?: string): Observable<HeroDto[]> {
-    return timer(2000).pipe(
+    return timer(TIMEOUT).pipe(
       map(() => {
         const result = clone(this._heroes);
         if (!query) return result;
@@ -27,13 +29,13 @@ export class HeroService {
   }
 
   fetchHero(id: number): Observable<HeroDto | null> {
-    return timer(2000).pipe(
+    return timer(TIMEOUT).pipe(
       map(() => clone(this._heroes?.find(x => x.id === id) || null))
     );
   }
 
   updateHero(id: number, name: string): Observable<HeroDto> {
-    return timer(2000).pipe(
+    return timer(TIMEOUT).pipe(
       map(() => {
         const updated = {id, name};
         this._heroes = update(id, updated, this._heroes);
@@ -43,7 +45,7 @@ export class HeroService {
   }
 
   deleteHero(id: number): Observable<void> {
-    return timer(2000).pipe(
+    return timer(TIMEOUT).pipe(
       map(() => {
         return undefined;
       })
