@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import {HeroListFacade} from "./hero-list.facade";
 
 @Component({
   selector: 'app-hero-list',
   templateUrl: './hero-list.component.html',
   styleUrls: ['./hero-list.component.css']
 })
-export class HeroListComponent implements OnInit {
+export class HeroListComponent {
+  heroes$ = this.facade.heroes$;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  constructor(private facade: HeroListFacade) { }
 }

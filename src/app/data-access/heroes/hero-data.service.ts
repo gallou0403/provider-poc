@@ -1,13 +1,15 @@
 import {HeroService} from "./infrastructure/hero.service";
 import {map, Observable} from "rxjs";
 import {Hero} from "./hero.model";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class HeroDataService {
   constructor(private dataService: HeroService) {
   }
 
-  getHeroes(): Observable<Hero[]> {
-    return this.dataService.fetchHeroes() as Observable<Hero[]>;
+  getHeroes(query?: string): Observable<Hero[]> {
+    return this.dataService.fetchHeroes(query) as Observable<Hero[]>;
   }
 
   getHero(id: number): Observable<Hero> {

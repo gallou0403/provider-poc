@@ -1,5 +1,6 @@
 import {ModuleWithProviders, NgModule, Provider} from '@angular/core';
 import {HeroDataService} from "./hero-data.service";
+import {HeroService} from "./infrastructure/hero.service";
 
 interface Versions {
   heroService: 'v1'
@@ -25,7 +26,7 @@ export class HeroesDataAccessModule {
 
 const getHeroServiceProvider = (version: string): Provider => {
   switch (version) {
-    case 'v1': return HeroDataService;
+    case 'v1': return HeroService;
     default:
       throw new Error(`Invalid Version for HeroService: ${version}`);
   }

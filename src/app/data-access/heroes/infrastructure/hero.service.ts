@@ -12,9 +12,17 @@ export class HeroService {
     this._heroes = clone(MOCK_HEROES);
   }
 
-  fetchHeroes(): Observable<HeroDto[]> {
+  fetchHeroes(query?: string): Observable<HeroDto[]> {
     return timer(2000).pipe(
-      map(() => clone(this._heroes))
+      map(() => {
+        const result = clone(this._heroes);
+        if (!query) return result;
+        return result.filter(hero =>
+          hero.name.toLowerCase().trim().startsWith(
+            query.toLowerCase().trim()
+          )
+        )
+      })
     );
   }
 
