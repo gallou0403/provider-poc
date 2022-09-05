@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Store} from "@ngrx/store";
 import {HeroState} from "../state/hero.reducers";
-import {selectDetailHero} from "../state/hero.selectors";
+import {isLoading, selectDetailHero} from "../state/hero.selectors";
 import {map} from "rxjs";
 import {HeroDetailForm} from "./hero-detail.form";
 import {detailHeroCreate, detailHeroDelete, detailHeroPageEnter, detailHeroUpdate} from "../state/hero.actions";
@@ -16,6 +16,8 @@ export class HeroDetailFacade {
       return new HeroDetailForm(result.detailHero);
     })
   );
+
+  isLoading$ = this.store.select(isLoading);
 
   constructor(private store: Store<HeroState>) {
   }

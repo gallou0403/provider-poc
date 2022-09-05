@@ -6,25 +6,27 @@ import {StateModule} from "../state/state.module";
 import {HeroesDataAccessModule} from "../../data-access/heroes/heroes-data-access.module";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
     HeroListComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: HeroListComponent
-      }
-    ]),
-    StateModule,
-    HeroesDataAccessModule.forRoot({
-      heroService: 'v1'
-    }),
-    MatButtonModule,
-    MatIconModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild([
+            {
+                path: '',
+                component: HeroListComponent
+            }
+        ]),
+        StateModule,
+        HeroesDataAccessModule.forRoot({
+            heroService: 'v1'
+        }),
+        MatButtonModule,
+        MatIconModule,
+        MatProgressSpinnerModule
+    ]
 })
 export class HeroListModule { }

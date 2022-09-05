@@ -10,6 +10,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class HeroDetailComponent {
   form$ = this.facade.form$;
+  isLoading$ = this.facade.isLoading$;
 
   constructor(private facade: HeroDetailFacade,
               private router: Router,

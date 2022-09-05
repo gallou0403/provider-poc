@@ -1,6 +1,7 @@
 import {heroAdapter, HeroState} from "./hero.reducers";
 import {createFeatureSelector, createSelector} from "@ngrx/store";
-import { getSelectors, RouterReducerState } from '@ngrx/router-store';
+import {getSelectors} from '@ngrx/router-store';
+import {LoadingState} from "./constants/call-state.const";
 
 
 const heroAdapterSelectors = heroAdapter.getSelectors();
@@ -18,4 +19,9 @@ export const selectDetailHero = createSelector(
       detailHero: heroId ? heroes?.[heroId] : undefined
     };
   }
+)
+
+export const isLoading = createSelector(
+  heroesFeatureSelector,
+  (state) => state.callState === LoadingState.Loading
 )

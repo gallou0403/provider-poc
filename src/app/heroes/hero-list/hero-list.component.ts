@@ -8,6 +8,7 @@ import {HeroListFacade} from "./hero-list.facade";
 })
 export class HeroListComponent {
   heroes$ = this.facade.heroes$;
+  isLoading$ = this.facade.isLoading$;
 
   constructor(private facade: HeroListFacade) {
     this.facade.init();

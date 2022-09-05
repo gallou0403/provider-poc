@@ -1,10 +1,13 @@
-<input #searchInput type="text" (keyup)="search(searchInput.value)">
-<ul>
-  <li *ngFor="let hero of heroes$ | async">
-    <a [routerLink]="['hero', hero.id]">{{hero.name}}</a>
-    <button mat-icon-button (click)="delete(hero.id)">
-      <mat-icon>delete_forever</mat-icon>
-    </button>
-  </li>
-  <li><a [routerLink]="['hero']">Create New</a></li>
-</ul>
+<mat-spinner mode="indeterminate" *ngIf="isLoading$ | async; else content"></mat-spinner>
+<ng-template #content>
+  <input #searchInput type="text" (keyup)="search(searchInput.value)">
+  <ul>
+    <li *ngFor="let hero of heroes$ | async">
+      <a [routerLink]="['hero', hero.id]">{{hero.name}}</a>
+      <button mat-icon-button (click)="delete(hero.id)">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+    </li>
+    <li><a [routerLink]="['hero']">Create New</a></li>
+  </ul>
+</ng-template>

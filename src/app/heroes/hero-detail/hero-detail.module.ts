@@ -6,6 +6,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 
 
@@ -13,22 +14,23 @@ import {MatButtonModule} from "@angular/material/button";
   declarations: [
     HeroDetailComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: HeroDetailComponent
-      },
-      {
-        path: ':heroId',
-        component: HeroDetailComponent
-      },
-    ]),
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild([
+            {
+                path: '',
+                component: HeroDetailComponent
+            },
+            {
+                path: ':heroId',
+                component: HeroDetailComponent
+            },
+        ]),
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatProgressSpinnerModule
+    ]
 })
 export class HeroDetailModule { }
