@@ -2,7 +2,7 @@ import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import {Hero} from "../../data-access/heroes/hero.model";
 import {createReducer, on} from "@ngrx/store";
 import * as HeroActions from './hero.actions';
-import {act} from "@ngrx/effects";
+import {detailHeroDeleteNavigated} from "./hero.actions";
 
 export interface HeroState extends EntityState<Hero> {
   error: string | null;
@@ -22,14 +22,18 @@ const detailHeroLoadedReducer = on(HeroActions.detailHeroLoaded, (state, action)
   return heroAdapter.addOne(action.detailHero, state as HeroState);
 });
 
-const detailHeroUpdatedReducer = on(HeroActions.detailHeroUpdateSuccess, (state, action) => {
+const heroUpdatedReducer = on(HeroActions.detailHeroUpdateSuccess, (state, action) => {
   return heroAdapter.updateOne({
     id: action.detailHero.id,
     changes: {
       name: action.detailHero.name
     }
   }, state as HeroState);
-})
+});
+
+const heroDeletedReducer = on(HeroActions.detailHeroDeleteNavigated, (state, action) => {
+  return heroAdapter.removeOne(action.id, state as HeroState);
+});
 
 
 const heroesErrorReducer = on(
@@ -47,7 +51,8 @@ const heroesErrorReducer = on(
 const heroReducers = [
   heroesLoadedReducer,
   detailHeroLoadedReducer,
-  detailHeroUpdatedReducer,
+  heroUpdatedReducer,
+  heroDeletedReducer,
   heroesErrorReducer
 ];
 

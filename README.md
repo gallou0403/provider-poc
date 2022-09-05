@@ -28,7 +28,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## TODO:
 - add some basic styling
-- turn detail page into an editable form that updates hero
 - allow deletion of hero from both pages
 - allow creation of new heroes
 - proper error handling

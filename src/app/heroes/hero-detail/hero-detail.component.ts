@@ -20,4 +20,8 @@ export class HeroDetailComponent {
       this.facade.submit(form);
     }
   }
+
+  delete(id: number) {
+    this.facade.deleteHero(id);
+  }
 }

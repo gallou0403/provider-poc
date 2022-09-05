@@ -2,20 +2,33 @@ import {Injectable} from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import {HeroDataService} from "../../data-access/heroes/hero-data.service";
 import * as HeroActions from './hero.actions';
-import {catchError, concatMap, debounceTime, EMPTY, exhaustMap, filter, map, switchMap} from "rxjs";
+import {catchError, concatMap, debounceTime, EMPTY, exhaustMap, filter, first, map, of, switchMap, tap} from "rxjs";
 import {Store} from "@ngrx/store";
 import {HeroState} from "./hero.reducers";
 import {selectDetailHero} from "./hero.selectors";
-import {DETAIL_HERO_UPDATE, HEROES_PAGE_ENTER, HEROES_SEARCH} from "./hero-action-types.const";
+import {
+  DETAIL_HERO_DELETE,
+  DETAIL_HERO_DELETE_SUCCESS,
+  DETAIL_HERO_UPDATE,
+  HEROES_PAGE_ENTER,
+  HEROES_SEARCH
+} from "./hero-action-types.const";
 import {Hero} from "../../data-access/heroes/hero.model";
-import {detailHeroUpdateError, detailHeroUpdateSuccess} from "./hero.actions";
+import {
+  detailHeroDeleteError, detailHeroDeleteNavigated,
+  detailHeroDeleteSuccess,
+  detailHeroUpdateError,
+  detailHeroUpdateSuccess
+} from "./hero.actions";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Injectable()
 export class HeroEffects {
   constructor(
     private heroService: HeroDataService,
     private actions$: Actions,
-    private store: Store<HeroState>) {
+    private store: Store<HeroState>,
+    private router: Router) {
   }
 
   loadHeroes$ = createEffect(() =>
@@ -26,8 +39,8 @@ export class HeroEffects {
           .pipe(
             map((heroes) => HeroActions.heroesLoaded({heroes})),
             catchError(e => {
-              HeroActions.heroesLoadError({error: e.message});
-              return EMPTY;
+              const errAction = HeroActions.heroesLoadError({error: e.message});
+              return of(errAction);
             })
           )
       )
@@ -42,8 +55,8 @@ export class HeroEffects {
           .pipe(
             map((heroes) => HeroActions.heroesLoaded({heroes})),
             catchError(e => {
-              HeroActions.heroesLoadError({error: e.message});
-              return EMPTY;
+              const errAction = HeroActions.heroesLoadError({error: e.message});
+              return of(errAction);
             })
           )
       )
@@ -57,8 +70,8 @@ export class HeroEffects {
           return this.heroService.getHero(Number(id)).pipe(
             map(remoteHero => HeroActions.detailHeroLoaded({detailHero: remoteHero})),
             catchError(e => {
-              HeroActions.detailHeroError({error: e.message});
-              return EMPTY;
+              const errAction = HeroActions.detailHeroError({error: e.message});
+              return of(errAction);
             })
           )
         } else {
@@ -74,10 +87,40 @@ export class HeroEffects {
         return this.heroService.updateHero(detailHero.id, detailHero.name).pipe(
           map((detailHero) => detailHeroUpdateSuccess({detailHero})),
           catchError(e => {
-            detailHeroUpdateError({error: e.message})
-            return EMPTY;
+            const errAction = detailHeroUpdateError({error: e.message})
+            return of(errAction);
           })
         )
       })
     ));
+
+  deleteDetailHero$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_DELETE),
+      exhaustMap(({id}: {id: number}) => {
+        return this.heroService.removeHero(id).pipe(
+          map(() => {
+            return detailHeroDeleteSuccess({id});
+          }),
+          catchError(e => {
+            const errAction = detailHeroDeleteError({error: e.message});
+            return of(errAction);
+          })
+        )
+      })
+    ));
+
+  navigateToHeroListOnDelete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_DELETE_SUCCESS),
+      switchMap((action: {id: number}) => {
+        this.router.navigate(['/heroes']);
+        return this.router.events.pipe(
+          filter(evt => evt instanceof NavigationEnd),
+          first(),
+          map(() => detailHeroDeleteNavigated({id: action.id}))
+        )
+      }),
+    )
+  );
 }
