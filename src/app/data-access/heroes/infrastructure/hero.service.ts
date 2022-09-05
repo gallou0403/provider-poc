@@ -43,7 +43,7 @@ export class HeroService {
       map(() => {
         const newHero = {
           ...hero,
-          id: this._heroes.length
+          id: Math.random() * (100000000 - 1000) + 1000
         };
         this._heroes.push(newHero);
         return newHero;
