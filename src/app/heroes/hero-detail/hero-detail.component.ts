@@ -16,4 +16,8 @@ export class HeroDetailComponent {
   );
 
   constructor(private facade: HeroDetailFacade) { }
+
+  submit(form: HeroDetailForm) {
+    console.log(form);
+  }
 }

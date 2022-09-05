@@ -1,4 +1,14 @@
 <form *ngIf="form$ | async as form" [formGroup]="form">
-  <input formControlName="id" readonly>
-  <input formControlName="name">
+  <mat-form-field appearance="fill">
+    <label>ID</label>
+    <input formControlName="id" readonly matInput>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <label>Name</label>
+    <input formControlName="name" matInput>
+  </mat-form-field>
+  <div>
+    <button mat-button color="accent" type="button" (click)="form.reset()">Cancel</button>
+    <button mat-flat-button color="accent" (click)="submit(form)">Submit</button>
+  </div>
 </form>
