@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HeroDetailFacade} from "./hero-detail.facade";
+import {HeroDetailForm} from "./hero-detail.form";
+import {map} from "rxjs";
 
 @Component({
   selector: 'app-hero-detail',
@@ -7,7 +9,11 @@ import {HeroDetailFacade} from "./hero-detail.facade";
   styleUrls: ['./hero-detail.component.css']
 })
 export class HeroDetailComponent {
-  detailHero$ = this.facade.detailHero$;
+  form$ = this.facade.detailHero$.pipe(
+    map(result => {
+      return new HeroDetailForm(result.detailHero);
+    })
+  );
 
   constructor(private facade: HeroDetailFacade) { }
 }

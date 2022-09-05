@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeroDetailComponent } from './hero-detail.component';
 import {RouterModule} from "@angular/router";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -9,14 +10,15 @@ import {RouterModule} from "@angular/router";
   declarations: [
     HeroDetailComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: HeroDetailComponent
-      }
-    ])
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild([
+            {
+                path: '',
+                component: HeroDetailComponent
+            }
+        ]),
+        ReactiveFormsModule
+    ]
 })
 export class HeroDetailModule { }

@@ -1,2 +1,4 @@
-<p>hero-detail works!</p>
-{{detailHero$ | async | json}}
+<form *ngIf="form$ | async as form" [formGroup]="form">
+  <input formControlName="id" readonly>
+  <input formControlName="name">
+</form>

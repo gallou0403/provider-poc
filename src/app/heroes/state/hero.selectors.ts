@@ -15,7 +15,7 @@ export const selectDetailHero = createSelector(
   (heroes, heroId) => {
     return {
       id: heroId,
-      detailHero: heroId ? heroes?.[heroId] : null
+      detailHero: heroId ? heroes?.[heroId] : undefined
     };
   }
 )
