@@ -36,7 +36,6 @@ import {
   HEROES_DELETE,
   HEROES_DELETE_ERROR,
   HEROES_DELETE_SUCCESS,
-  HEROES_LOAD,
   HEROES_LOAD_ERROR,
   HEROES_PAGE_ENTER,
   HEROES_SEARCH
@@ -63,19 +62,9 @@ export class HeroEffects {
     private snackbar: MatSnackBar) {
   }
 
-  enterHeroesPage$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(HEROES_PAGE_ENTER),
-      concatLatestFrom(() => this.store.select(selectAllHeroes)),
-      filter(([_, heroes]) => !heroes?.length),
-      map(() => {
-        return HeroActions.heroesLoad();
-      })
-    ));
-
   loadHeroes$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(HEROES_LOAD),
+      ofType(HEROES_PAGE_ENTER),
       exhaustMap(() =>
         this.heroService.getHeroes()
           .pipe(

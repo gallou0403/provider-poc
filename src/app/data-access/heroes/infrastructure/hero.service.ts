@@ -56,7 +56,8 @@ export class HeroService {
     return timer(TIMEOUT).pipe(
       map(() => {
         const updated = {id, name};
-        this._heroes = update(id, updated, this._heroes);
+        const index = this._heroes.findIndex(x => x.id === id);
+        this._heroes = update(index, updated, this._heroes);
         return updated;
       })
     );

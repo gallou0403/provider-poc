@@ -4,7 +4,6 @@ import * as ACTION_TYPES from "./constants/hero-action-types.const";
 
 export const heroesPageEnter = createAction(ACTION_TYPES.HEROES_PAGE_ENTER);
 export const heroesSearch = createAction(ACTION_TYPES.HEROES_SEARCH, props<{query: string}>());
-export const heroesLoad = createAction(ACTION_TYPES.HEROES_LOAD);
 export const heroesLoadSuccess = createAction(ACTION_TYPES.HEROES_LOAD_SUCCESS, props<{heroes: Hero[]}>());
 export const heroesLoadError = createAction(ACTION_TYPES.HEROES_LOAD_ERROR, props<{error: Error}>());
 export const heroesDelete = createAction(ACTION_TYPES.HEROES_DELETE, props<{id: number}>());
