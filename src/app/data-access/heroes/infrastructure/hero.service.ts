@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {MOCK_HEROES} from "./mock-heroes";
 import {map, Observable, timer} from "rxjs";
-import {clone, update} from "ramda";
+import {clone, remove, update, without} from "ramda";
 import {HeroDto} from "./hero-dto.model";
 
 const TIMEOUT = 500;
@@ -47,6 +47,11 @@ export class HeroService {
   deleteHero(id: number): Observable<void> {
     return timer(TIMEOUT).pipe(
       map(() => {
+        const toDelete = this._heroes.find(x => x.id === id);
+
+        if (toDelete) {
+          this._heroes = without([toDelete], this._heroes);
+        }
         return undefined;
       })
     );
