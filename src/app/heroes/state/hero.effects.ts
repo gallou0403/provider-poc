@@ -2,11 +2,13 @@ import {Injectable} from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import {HeroDataService} from "../../data-access/heroes/hero-data.service";
 import * as HeroActions from './hero.actions';
-import {catchError, debounceTime, EMPTY, exhaustMap, filter, map, switchMap} from "rxjs";
+import {catchError, concatMap, debounceTime, EMPTY, exhaustMap, filter, map, switchMap} from "rxjs";
 import {Store} from "@ngrx/store";
 import {HeroState} from "./hero.reducers";
 import {selectDetailHero} from "./hero.selectors";
-import {HEROES_PAGE_ENTER, HEROES_SEARCH} from "./hero-action-types.const";
+import {DETAIL_HERO_UPDATE, HEROES_PAGE_ENTER, HEROES_SEARCH} from "./hero-action-types.const";
+import {Hero} from "../../data-access/heroes/hero.model";
+import {detailHeroUpdateError, detailHeroUpdateSuccess} from "./hero.actions";
 
 @Injectable()
 export class HeroEffects {
@@ -62,6 +64,20 @@ export class HeroEffects {
         } else {
           return EMPTY;
         }
+      })
+    ));
+
+  updateDetailHero$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_UPDATE),
+      concatMap(({detailHero}: {detailHero: Hero}) => {
+        return this.heroService.updateHero(detailHero.id, detailHero.name).pipe(
+          map((detailHero) => detailHeroUpdateSuccess({detailHero})),
+          catchError(e => {
+            detailHeroUpdateError({error: e.message})
+            return EMPTY;
+          })
+        )
       })
     ));
 }

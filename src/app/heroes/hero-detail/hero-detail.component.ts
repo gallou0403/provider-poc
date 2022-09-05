@@ -9,15 +9,15 @@ import {map} from "rxjs";
   styleUrls: ['./hero-detail.component.css']
 })
 export class HeroDetailComponent {
-  form$ = this.facade.detailHero$.pipe(
-    map(result => {
-      return new HeroDetailForm(result.detailHero);
-    })
-  );
+  form$ = this.facade.form$;
 
   constructor(private facade: HeroDetailFacade) { }
 
   submit(form: HeroDetailForm) {
-    console.log(form);
+    if (form.invalid) {
+      console.warn('form is invalid', form);
+    } else {
+      this.facade.submit(form);
+    }
   }
 }

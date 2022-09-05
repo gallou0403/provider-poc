@@ -2,7 +2,7 @@ import {createAction, props} from "@ngrx/store";
 import {Hero} from "../../data-access/heroes/hero.model";
 import {
   DETAIL_HERO_ERROR,
-  DETAIL_HERO_LOADED,
+  DETAIL_HERO_LOADED, DETAIL_HERO_UPDATE, DETAIL_HERO_UPDATE_ERROR, DETAIL_HERO_UPDATE_SUCCESS,
   HEROES_LOAD_ERROR,
   HEROES_LOADED,
   HEROES_PAGE_ENTER,
@@ -16,3 +16,6 @@ export const heroesLoadError = createAction(HEROES_LOAD_ERROR, props<{error: str
 
 export const detailHeroLoaded = createAction(DETAIL_HERO_LOADED, props<{detailHero: Hero}>());
 export const detailHeroError = createAction(DETAIL_HERO_ERROR, props<{error: string}>());
+export const detailHeroUpdate = createAction(DETAIL_HERO_UPDATE, props<{detailHero: Hero}>());
+export const detailHeroUpdateSuccess = createAction(DETAIL_HERO_UPDATE_SUCCESS, props<{detailHero: Hero}>());
+export const detailHeroUpdateError = createAction(DETAIL_HERO_UPDATE_ERROR, props<{error: string}>());
