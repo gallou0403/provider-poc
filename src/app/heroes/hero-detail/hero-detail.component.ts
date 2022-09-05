@@ -13,7 +13,9 @@ export class HeroDetailComponent {
 
   constructor(private facade: HeroDetailFacade,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute) {
+    this.facade.init();
+  }
 
   get isNew(): boolean {
     return !this.route.snapshot.paramMap.get('heroId');

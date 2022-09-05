@@ -2,23 +2,23 @@ import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import {Hero} from "../../data-access/heroes/hero.model";
 import {createReducer, on} from "@ngrx/store";
 import * as HeroActions from './hero.actions';
-import {detailHeroDeleteNavigated} from "./hero.actions";
+import {CallState, LoadingState} from "./constants/call-state.const";
 
 export interface HeroState extends EntityState<Hero> {
-  error: string | null;
+  callState: CallState;
 }
 
 export const heroAdapter = createEntityAdapter<Hero>();
 
 export const initialState: HeroState = heroAdapter.getInitialState({
-  error: null
+  callState: LoadingState.Init
 });
 
-const heroesLoadedReducer = on(HeroActions.heroesLoaded, (state, action) => {
+const heroesLoadedReducer = on(HeroActions.heroesLoadSuccess, (state, action) => {
   return heroAdapter.setAll(action.heroes, state as HeroState);
 });
 
-const detailHeroLoadedReducer = on(HeroActions.detailHeroLoaded, (state, action) => {
+const detailHeroLoadedReducer = on(HeroActions.detailHeroLoadSuccess, (state, action) => {
   return heroAdapter.addOne(action.detailHero, state as HeroState);
 });
 
@@ -42,26 +42,12 @@ const heroDeletedReducer = on(
   return heroAdapter.removeOne(action.id, state as HeroState);
 });
 
-
-const heroesErrorReducer = on(
-  HeroActions.heroesLoadError,
-  HeroActions.detailHeroError,
-  HeroActions.detailHeroUpdateError,
-  (state, action) => {
-  return {
-    ...(state as HeroState),
-    ...heroAdapter.setAll([], state as HeroState),
-    error: action.error
-  }
-});
-
 const heroReducers = [
   heroesLoadedReducer,
   detailHeroLoadedReducer,
   heroCreatedReducer,
   heroUpdatedReducer,
   heroDeletedReducer,
-  heroesErrorReducer
 ];
 
 export const heroReducer = createReducer(

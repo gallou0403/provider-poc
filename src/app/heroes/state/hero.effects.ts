@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import { createEffect, Actions, ofType } from "@ngrx/effects";
+import {createEffect, Actions, ofType, concatLatestFrom} from "@ngrx/effects";
 import {HeroDataService} from "../../data-access/heroes/hero-data.service";
 import * as HeroActions from './hero.actions';
 import {
@@ -14,11 +14,11 @@ import {
   of,
   retry,
   switchMap,
-  tap
+  tap, withLatestFrom
 } from "rxjs";
 import {Action, Store} from "@ngrx/store";
 import {HeroState} from "./hero.reducers";
-import {selectDetailHero} from "./hero.selectors";
+import {selectAllHeroes, selectDetailHero} from "./hero.selectors";
 import {
   DETAIL_HERO_CREATE,
   DETAIL_HERO_CREATE_ERROR,
@@ -26,22 +26,27 @@ import {
   DETAIL_HERO_DELETE,
   DETAIL_HERO_DELETE_ERROR,
   DETAIL_HERO_DELETE_SUCCESS,
-  DETAIL_HERO_ERROR,
+  DETAIL_HERO_LOAD,
+  DETAIL_HERO_LOAD_ERROR,
+  DETAIL_HERO_LOAD_SUCCESS,
+  DETAIL_HERO_PAGE_ENTER,
   DETAIL_HERO_UPDATE,
-  DETAIL_HERO_UPDATE_ERROR, DETAIL_HERO_UPDATE_SUCCESS,
+  DETAIL_HERO_UPDATE_ERROR,
+  DETAIL_HERO_UPDATE_SUCCESS,
   HEROES_DELETE,
   HEROES_DELETE_ERROR,
   HEROES_DELETE_SUCCESS,
+  HEROES_LOAD,
   HEROES_LOAD_ERROR,
   HEROES_PAGE_ENTER,
   HEROES_SEARCH
-} from "./hero-action-types.const";
+} from "./constants/hero-action-types.const";
 import {Hero} from "../../data-access/heroes/hero.model";
 import {
   detailHeroCreateError,
   detailHeroCreateSuccess,
   detailHeroDeleteError, detailHeroDeleteNavigated,
-  detailHeroDeleteSuccess,
+  detailHeroDeleteSuccess, detailHeroLoad,
   detailHeroUpdateError,
   detailHeroUpdateSuccess, heroesDeleteSuccess
 } from "./hero.actions";
@@ -58,13 +63,23 @@ export class HeroEffects {
     private snackbar: MatSnackBar) {
   }
 
-  loadHeroes$ = createEffect(() =>
+  enterHeroesPage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(HEROES_PAGE_ENTER),
+      concatLatestFrom(() => this.store.select(selectAllHeroes)),
+      filter(([_, heroes]) => !heroes?.length),
+      map(() => {
+        return HeroActions.heroesLoad();
+      })
+    ));
+
+  loadHeroes$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HEROES_LOAD),
       exhaustMap(() =>
         this.heroService.getHeroes()
           .pipe(
-            map((heroes) => HeroActions.heroesLoaded({heroes})),
+            map((heroes) => HeroActions.heroesLoadSuccess({heroes})),
             catchError(error => of(HeroActions.heroesLoadError({error})))
           )
       )
@@ -77,7 +92,7 @@ export class HeroEffects {
       switchMap(({query}) =>
         this.heroService.getHeroes(query)
           .pipe(
-            map((heroes) => HeroActions.heroesLoaded({heroes})),
+            map((heroes) => HeroActions.heroesLoadSuccess({heroes})),
             catchError(error => of(HeroActions.heroesLoadError({error})))
           )
       )
@@ -94,27 +109,31 @@ export class HeroEffects {
       })
     ))
 
+  enterDetailHeroPage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_PAGE_ENTER),
+      concatLatestFrom(() => this.store.select(selectDetailHero)),
+      filter(([_, {id, detailHero}]) => !!id && !detailHero),
+      map(([_, {id}]) => detailHeroLoad({id: Number(id)}))
+    ));
+
   loadDetailHero$ = createEffect(() =>
-    this.store.select(selectDetailHero).pipe(
-      filter(({id}) => !!id),
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_LOAD),
       switchMap(({detailHero, id}) => {
-        if (!detailHero) {
-          return this.heroService.getHero(Number(id)).pipe(
-            map(remoteHero => HeroActions.detailHeroLoaded({detailHero: remoteHero})),
-            retry(2),
-          )
-        } else {
-          return EMPTY;
-        }
+        return this.heroService.getHero(Number(id)).pipe(
+          map(remoteHero => HeroActions.detailHeroLoadSuccess({detailHero: remoteHero})),
+          retry(2),
+        )
       }),
       // catch at top-level so observable completes
-      catchError(error => of(HeroActions.detailHeroError({error})))
+      catchError(error => of(HeroActions.detailHeroLoadError({error})))
     ));
 
   loadDetailHeroError$ = createEffect(() =>
       this.actions$.pipe(
-        ofType(DETAIL_HERO_ERROR),
-        switchMap((action: Action & {detailHero: Hero}) => {
+        ofType(DETAIL_HERO_LOAD_ERROR),
+        switchMap(() => {
           return this.router.navigate(['/heroes']);
         }),
       ),
@@ -198,7 +217,7 @@ export class HeroEffects {
       ofType(...[
         HEROES_LOAD_ERROR,
         HEROES_DELETE_ERROR,
-        DETAIL_HERO_ERROR,
+        DETAIL_HERO_LOAD_ERROR,
         DETAIL_HERO_DELETE_ERROR,
         DETAIL_HERO_CREATE_ERROR,
         DETAIL_HERO_UPDATE_ERROR,
