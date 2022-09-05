@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {HeroDetailFacade} from "./hero-detail.facade";
 import {HeroDetailForm} from "./hero-detail.form";
-import {map} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-hero-detail',
@@ -11,17 +11,35 @@ import {map} from "rxjs";
 export class HeroDetailComponent {
   form$ = this.facade.form$;
 
-  constructor(private facade: HeroDetailFacade) { }
+  constructor(private facade: HeroDetailFacade,
+              private router: Router,
+              private route: ActivatedRoute) { }
+
+  get isNew(): boolean {
+    return !this.route.snapshot.paramMap.get('heroId');
+  }
 
   submit(form: HeroDetailForm) {
     if (form.invalid) {
       console.warn('form is invalid', form);
+    }
+
+    if (this.isNew) {
+      this.facade.create(form.value);
     } else {
-      this.facade.submit(form);
+      this.facade.update(form.value);
     }
   }
 
   delete(id: number) {
     this.facade.deleteHero(id);
+  }
+
+  cancel(form: HeroDetailForm) {
+    if (this.isNew) {
+      this.router.navigate(['heroes']);
+    } else {
+      form.reset();
+    }
   }
 }

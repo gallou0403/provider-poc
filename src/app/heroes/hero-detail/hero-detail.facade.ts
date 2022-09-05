@@ -4,7 +4,8 @@ import {HeroState} from "../state/hero.reducers";
 import {selectDetailHero} from "../state/hero.selectors";
 import {map} from "rxjs";
 import {HeroDetailForm} from "./hero-detail.form";
-import {detailHeroDelete, detailHeroUpdate} from "../state/hero.actions";
+import {detailHeroCreate, detailHeroDelete, detailHeroUpdate} from "../state/hero.actions";
+import {Hero} from "../../data-access/heroes/hero.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,12 @@ export class HeroDetailFacade {
   constructor(private store: Store<HeroState>) {
   }
 
-  submit(form: HeroDetailForm) {
-    this.store.dispatch(detailHeroUpdate({detailHero: form.value}));
+  create(hero: Hero) {
+    this.store.dispatch(detailHeroCreate({detailHero: hero}));
+  }
+
+  update(hero: Hero) {
+    this.store.dispatch(detailHeroUpdate({detailHero: hero}));
   }
 
   deleteHero(id: number) {

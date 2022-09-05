@@ -1,5 +1,5 @@
 <form *ngIf="form$ | async as form" [formGroup]="form" (ngSubmit)="submit(form)">
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" *ngIf="form.value.id">
     <label>ID</label>
     <input formControlName="id" readonly matInput>
   </mat-form-field>
@@ -9,8 +9,8 @@
     <mat-error>Name is required</mat-error>
   </mat-form-field>
   <div>
-    <button mat-button color="warn" type="button" (click)="delete(form.value.id)">Delete</button>
-    <button mat-button color="accent" type="button" (click)="form.reset()">Cancel</button>
+    <button mat-button color="warn" type="button" (click)="delete(form.value.id)" *ngIf="!isNew">Delete</button>
+    <button mat-button color="accent" type="button" (click)="cancel(form)">Cancel</button>
     <button mat-flat-button color="accent" type="submit">Submit</button>
   </div>
 </form>

@@ -1,7 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {HeroListFacade} from "./hero-list.facade";
-import {FormControl} from "@angular/forms";
-import {Subject, takeUntil} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-hero-list',

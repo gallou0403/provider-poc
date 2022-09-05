@@ -3,10 +3,11 @@ import { createEffect, Actions, ofType } from "@ngrx/effects";
 import {HeroDataService} from "../../data-access/heroes/hero-data.service";
 import * as HeroActions from './hero.actions';
 import {catchError, concatMap, debounceTime, EMPTY, exhaustMap, filter, first, map, of, switchMap, tap} from "rxjs";
-import {Store} from "@ngrx/store";
+import {Action, Store} from "@ngrx/store";
 import {HeroState} from "./hero.reducers";
 import {selectDetailHero} from "./hero.selectors";
 import {
+  DETAIL_HERO_CREATE, DETAIL_HERO_CREATE_SUCCESS,
   DETAIL_HERO_DELETE,
   DETAIL_HERO_DELETE_SUCCESS,
   DETAIL_HERO_UPDATE, HEROES_DELETE,
@@ -15,6 +16,8 @@ import {
 } from "./hero-action-types.const";
 import {Hero} from "../../data-access/heroes/hero.model";
 import {
+  detailHeroCreateError,
+  detailHeroCreateSuccess,
   detailHeroDeleteError, detailHeroDeleteNavigated,
   detailHeroDeleteSuccess,
   detailHeroUpdateError,
@@ -90,6 +93,30 @@ export class HeroEffects {
         }
       })
     ));
+
+  createDetailHero = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_CREATE),
+      concatMap(({detailHero}: {detailHero: Hero}) => {
+        return this.heroService.createHero(detailHero).pipe(
+          map((detailHero) => detailHeroCreateSuccess({detailHero})),
+          catchError(e => {
+            const errAction = detailHeroCreateError({error: e.message, id: detailHero.id})
+            return of(errAction);
+          })
+        )
+      })
+    ));
+
+  navigateToHeroOnCreate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DETAIL_HERO_CREATE_SUCCESS),
+      switchMap((action: Action & {detailHero: Hero}) => {
+        return this.router.navigate(['/heroes', 'hero', action.detailHero.id]);
+      }),
+    ),
+    {dispatch: false}
+  );
 
   updateDetailHero$ = createEffect(() =>
     this.actions$.pipe(

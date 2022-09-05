@@ -34,6 +34,19 @@ export class HeroService {
     );
   }
 
+  createHero(hero: HeroDto): Observable<HeroDto> {
+    return timer(TIMEOUT).pipe(
+      map(() => {
+        const newHero = {
+          ...hero,
+          id: this._heroes.length
+        };
+        this._heroes.push(newHero);
+        return newHero;
+      })
+    );
+  }
+
   updateHero(id: number, name: string): Observable<HeroDto> {
     return timer(TIMEOUT).pipe(
       map(() => {

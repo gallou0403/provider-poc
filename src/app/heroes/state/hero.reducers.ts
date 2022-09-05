@@ -22,6 +22,10 @@ const detailHeroLoadedReducer = on(HeroActions.detailHeroLoaded, (state, action)
   return heroAdapter.addOne(action.detailHero, state as HeroState);
 });
 
+const heroCreatedReducer = on(HeroActions.detailHeroCreateSuccess, (state, action) => {
+  return heroAdapter.addOne(action.detailHero, state as HeroState);
+})
+
 const heroUpdatedReducer = on(HeroActions.detailHeroUpdateSuccess, (state, action) => {
   return heroAdapter.updateOne({
     id: action.detailHero.id,
@@ -54,6 +58,7 @@ const heroesErrorReducer = on(
 const heroReducers = [
   heroesLoadedReducer,
   detailHeroLoadedReducer,
+  heroCreatedReducer,
   heroUpdatedReducer,
   heroDeletedReducer,
   heroesErrorReducer

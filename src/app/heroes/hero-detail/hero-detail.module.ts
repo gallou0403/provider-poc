@@ -19,7 +19,11 @@ import {MatButtonModule} from "@angular/material/button";
       {
         path: '',
         component: HeroDetailComponent
-      }
+      },
+      {
+        path: ':heroId',
+        component: HeroDetailComponent
+      },
     ]),
     ReactiveFormsModule,
     MatFormFieldModule,

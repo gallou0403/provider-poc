@@ -16,6 +16,10 @@ export class HeroDataService {
     return this.dataService.fetchHero(id) as Observable<Hero>;
   }
 
+  createHero(hero: Hero): Observable<Hero> {
+    return this.dataService.createHero(hero) as Observable<Hero>;
+  }
+
   updateHero(id: number, name: string): Observable<Hero> {
     return this.dataService.updateHero(id, name);
   }
