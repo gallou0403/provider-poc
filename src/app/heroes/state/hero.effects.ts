@@ -2,15 +2,37 @@ import {Injectable} from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import {HeroDataService} from "../../data-access/heroes/hero-data.service";
 import * as HeroActions from './hero.actions';
-import {catchError, concatMap, debounceTime, EMPTY, exhaustMap, filter, first, map, of, switchMap, tap} from "rxjs";
+import {
+  catchError,
+  concatMap,
+  debounceTime,
+  EMPTY,
+  exhaustMap,
+  filter,
+  first,
+  map,
+  of,
+  retry,
+  switchMap,
+  tap
+} from "rxjs";
 import {Action, Store} from "@ngrx/store";
 import {HeroState} from "./hero.reducers";
 import {selectDetailHero} from "./hero.selectors";
 import {
-  DETAIL_HERO_CREATE, DETAIL_HERO_CREATE_SUCCESS,
+  DETAIL_HERO_CREATE,
+  DETAIL_HERO_CREATE_ERROR,
+  DETAIL_HERO_CREATE_SUCCESS,
   DETAIL_HERO_DELETE,
+  DETAIL_HERO_DELETE_ERROR,
   DETAIL_HERO_DELETE_SUCCESS,
-  DETAIL_HERO_UPDATE, HEROES_DELETE,
+  DETAIL_HERO_ERROR,
+  DETAIL_HERO_UPDATE,
+  DETAIL_HERO_UPDATE_ERROR, DETAIL_HERO_UPDATE_SUCCESS,
+  HEROES_DELETE,
+  HEROES_DELETE_ERROR,
+  HEROES_DELETE_SUCCESS,
+  HEROES_LOAD_ERROR,
   HEROES_PAGE_ENTER,
   HEROES_SEARCH
 } from "./hero-action-types.const";
@@ -24,6 +46,7 @@ import {
   detailHeroUpdateSuccess, heroesDeleteSuccess
 } from "./hero.actions";
 import {NavigationEnd, Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable()
 export class HeroEffects {
@@ -31,7 +54,8 @@ export class HeroEffects {
     private heroService: HeroDataService,
     private actions$: Actions,
     private store: Store<HeroState>,
-    private router: Router) {
+    private router: Router,
+    private snackbar: MatSnackBar) {
   }
 
   loadHeroes$ = createEffect(() =>
@@ -41,10 +65,7 @@ export class HeroEffects {
         this.heroService.getHeroes()
           .pipe(
             map((heroes) => HeroActions.heroesLoaded({heroes})),
-            catchError(e => {
-              const errAction = HeroActions.heroesLoadError({error: e.message});
-              return of(errAction);
-            })
+            catchError(error => of(HeroActions.heroesLoadError({error})))
           )
       )
     ));
@@ -57,10 +78,7 @@ export class HeroEffects {
         this.heroService.getHeroes(query)
           .pipe(
             map((heroes) => HeroActions.heroesLoaded({heroes})),
-            catchError(e => {
-              const errAction = HeroActions.heroesLoadError({error: e.message});
-              return of(errAction);
-            })
+            catchError(error => of(HeroActions.heroesLoadError({error})))
           )
       )
     ));
@@ -71,7 +89,7 @@ export class HeroEffects {
       concatMap(({id}: {id: number}) => {
         return this.heroService.removeHero(id).pipe(
           map(() => heroesDeleteSuccess({id})),
-          catchError(e => of(HeroActions.heroesDeleteError({error: e.message})))
+          catchError(error => of(HeroActions.heroesDeleteError({error})))
         )
       })
     ))
@@ -83,16 +101,25 @@ export class HeroEffects {
         if (!detailHero) {
           return this.heroService.getHero(Number(id)).pipe(
             map(remoteHero => HeroActions.detailHeroLoaded({detailHero: remoteHero})),
-            catchError(e => {
-              const errAction = HeroActions.detailHeroError({error: e.message});
-              return of(errAction);
-            })
+            retry(2),
           )
         } else {
           return EMPTY;
         }
-      })
+      }),
+      // catch at top-level so observable completes
+      catchError(error => of(HeroActions.detailHeroError({error})))
     ));
+
+  loadDetailHeroError$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(DETAIL_HERO_ERROR),
+        switchMap((action: Action & {detailHero: Hero}) => {
+          return this.router.navigate(['/heroes']);
+        }),
+      ),
+    {dispatch: false}
+  );
 
   createDetailHero = createEffect(() =>
     this.actions$.pipe(
@@ -100,10 +127,7 @@ export class HeroEffects {
       concatMap(({detailHero}: {detailHero: Hero}) => {
         return this.heroService.createHero(detailHero).pipe(
           map((detailHero) => detailHeroCreateSuccess({detailHero})),
-          catchError(e => {
-            const errAction = detailHeroCreateError({error: e.message, id: detailHero.id})
-            return of(errAction);
-          })
+          catchError(error => of(detailHeroCreateError({error})))
         )
       })
     ));
@@ -124,10 +148,7 @@ export class HeroEffects {
       concatMap(({detailHero}: {detailHero: Hero}) => {
         return this.heroService.updateHero(detailHero.id, detailHero.name).pipe(
           map((detailHero) => detailHeroUpdateSuccess({detailHero})),
-          catchError(e => {
-            const errAction = detailHeroUpdateError({error: e.message})
-            return of(errAction);
-          })
+          catchError(error => of(detailHeroUpdateError({error})))
         )
       })
     ));
@@ -137,13 +158,8 @@ export class HeroEffects {
       ofType(DETAIL_HERO_DELETE),
       exhaustMap(({id}: {id: number}) => {
         return this.heroService.removeHero(id).pipe(
-          map(() => {
-            return detailHeroDeleteSuccess({id});
-          }),
-          catchError(e => {
-            const errAction = detailHeroDeleteError({error: e.message});
-            return of(errAction);
-          })
+          map(() => detailHeroDeleteSuccess({id})),
+          catchError(error => of(detailHeroDeleteError({error})))
         )
       })
     ));
@@ -160,5 +176,39 @@ export class HeroEffects {
         )
       }),
     )
+  );
+
+  onSuccess$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(...[
+          HEROES_DELETE_SUCCESS,
+          DETAIL_HERO_CREATE_SUCCESS,
+          DETAIL_HERO_UPDATE_SUCCESS,
+          DETAIL_HERO_DELETE_SUCCESS
+        ]),
+        map((action) => {
+          this.snackbar.open('Success!', undefined, {duration: 3000});
+        })
+      ),
+    {dispatch: false}
+  );
+
+  onError$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(...[
+        HEROES_LOAD_ERROR,
+        HEROES_DELETE_ERROR,
+        DETAIL_HERO_ERROR,
+        DETAIL_HERO_DELETE_ERROR,
+        DETAIL_HERO_CREATE_ERROR,
+        DETAIL_HERO_UPDATE_ERROR,
+      ]),
+      map((action) => {
+        const typedAction = action as Action & {error: Error};
+        console.error(typedAction.error);
+        this.snackbar.open('Error!', undefined, {duration: 3000});
+      })
+    ),
+    {dispatch: false}
   );
 }
