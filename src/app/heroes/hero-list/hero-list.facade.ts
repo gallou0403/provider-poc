@@ -17,4 +17,8 @@ export class HeroListFacade {
   search(query: string = '') {
     this.store.dispatch(HeroActions.heroesSearch({query}));
   }
+
+  delete(id: number) {
+    this.store.dispatch(HeroActions.heroesDelete({id}))
+  }
 }

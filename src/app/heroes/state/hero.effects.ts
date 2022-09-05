@@ -9,7 +9,7 @@ import {selectDetailHero} from "./hero.selectors";
 import {
   DETAIL_HERO_DELETE,
   DETAIL_HERO_DELETE_SUCCESS,
-  DETAIL_HERO_UPDATE,
+  DETAIL_HERO_UPDATE, HEROES_DELETE,
   HEROES_PAGE_ENTER,
   HEROES_SEARCH
 } from "./hero-action-types.const";
@@ -18,7 +18,7 @@ import {
   detailHeroDeleteError, detailHeroDeleteNavigated,
   detailHeroDeleteSuccess,
   detailHeroUpdateError,
-  detailHeroUpdateSuccess
+  detailHeroUpdateSuccess, heroesDeleteSuccess
 } from "./hero.actions";
 import {NavigationEnd, Router} from "@angular/router";
 
@@ -61,6 +61,17 @@ export class HeroEffects {
           )
       )
     ));
+
+  deleteHero$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HEROES_DELETE),
+      concatMap(({id}: {id: number}) => {
+        return this.heroService.removeHero(id).pipe(
+          map(() => heroesDeleteSuccess({id})),
+          catchError(e => of(HeroActions.heroesDeleteError({error: e.message})))
+        )
+      })
+    ))
 
   loadDetailHero$ = createEffect(() =>
     this.store.select(selectDetailHero).pipe(

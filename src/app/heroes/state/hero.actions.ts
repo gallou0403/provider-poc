@@ -1,9 +1,17 @@
 import {createAction, props} from "@ngrx/store";
 import {Hero} from "../../data-access/heroes/hero.model";
 import {
-  DETAIL_HERO_DELETE, DETAIL_HERO_DELETE_ERROR, DETAIL_HERO_DELETE_NAVIGATED, DETAIL_HERO_DELETE_SUCCESS,
+  DETAIL_HERO_DELETE,
+  DETAIL_HERO_DELETE_ERROR,
+  DETAIL_HERO_DELETE_NAVIGATED,
+  DETAIL_HERO_DELETE_SUCCESS,
   DETAIL_HERO_ERROR,
-  DETAIL_HERO_LOADED, DETAIL_HERO_UPDATE, DETAIL_HERO_UPDATE_ERROR, DETAIL_HERO_UPDATE_SUCCESS,
+  DETAIL_HERO_LOADED,
+  DETAIL_HERO_UPDATE,
+  DETAIL_HERO_UPDATE_ERROR,
+  DETAIL_HERO_UPDATE_SUCCESS,
+  HEROES_DELETE, HEROES_DELETE_ERROR,
+  HEROES_DELETE_SUCCESS,
   HEROES_LOAD_ERROR,
   HEROES_LOADED,
   HEROES_PAGE_ENTER,
@@ -14,6 +22,9 @@ export const heroesPageEnter = createAction(HEROES_PAGE_ENTER);
 export const heroesSearch = createAction(HEROES_SEARCH, props<{query: string}>());
 export const heroesLoaded = createAction(HEROES_LOADED, props<{heroes: Hero[]}>());
 export const heroesLoadError = createAction(HEROES_LOAD_ERROR, props<{error: string}>());
+export const heroesDelete = createAction(HEROES_DELETE, props<{id: number}>());
+export const heroesDeleteSuccess = createAction(HEROES_DELETE_SUCCESS, props<{id: number}>());
+export const heroesDeleteError = createAction(HEROES_DELETE_ERROR, props<{error: string}>());
 
 export const detailHeroLoaded = createAction(DETAIL_HERO_LOADED, props<{detailHero: Hero}>());
 export const detailHeroError = createAction(DETAIL_HERO_ERROR, props<{error: string}>());

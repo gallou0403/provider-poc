@@ -2,5 +2,8 @@
 <ul>
   <li *ngFor="let hero of heroes$ | async">
     <a [routerLink]="[hero.id]">{{hero.name}}</a>
+    <button mat-icon-button (click)="delete(hero.id)">
+      <mat-icon>delete_forever</mat-icon>
+    </button>
   </li>
 </ul>

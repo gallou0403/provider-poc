@@ -16,4 +16,8 @@ export class HeroListComponent {
   search(query: string) {
     this.facade.search(query);
   }
+
+  delete(id: number) {
+    this.facade.delete(id);
+  }
 }

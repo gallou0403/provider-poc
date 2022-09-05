@@ -31,7 +31,10 @@ const heroUpdatedReducer = on(HeroActions.detailHeroUpdateSuccess, (state, actio
   }, state as HeroState);
 });
 
-const heroDeletedReducer = on(HeroActions.detailHeroDeleteNavigated, (state, action) => {
+const heroDeletedReducer = on(
+  HeroActions.detailHeroDeleteNavigated,
+  HeroActions.heroesDeleteSuccess,
+  (state, action) => {
   return heroAdapter.removeOne(action.id, state as HeroState);
 });
 
