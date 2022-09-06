@@ -19,8 +19,6 @@ export class ThemeModule {
     return {
       ngModule: ThemeModule,
       providers: [
-        BorderService,
-        BackgroundService,
         {
           provide: THEME_INJECTION_TOKENS.borderDataService,
           useClass: BorderDataService,

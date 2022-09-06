@@ -3,13 +3,15 @@ import { THEME_INJECTION_TOKENS } from '../constants/theme-injection-tokens.cons
 import { BackgroundServiceInterface } from '../interfaces/background-service.interface';
 import { BackgroundDataServiceInterface } from '../interfaces/background-data-service.interface'
 
-@Injectable()
+@Injectable({
+  providedIn: 'any'
+})
 export class BackgroundService implements BackgroundServiceInterface {
   constructor(
     @Inject(THEME_INJECTION_TOKENS.backgroundDataService)
     private dataService: BackgroundDataServiceInterface
   ) {
-    console.log('constructed');
+    console.log('constructed BackgroundService');
   }
 
   getBackground() {
