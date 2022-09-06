@@ -4,14 +4,13 @@ import {heroAdapter, HeroState} from "../state/hero.reducers";
 import * as HeroActions from '../state/hero.actions';
 import {isLoading, selectAllHeroes} from "../state/hero.selectors";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class HeroListFacade {
   heroes$ = this.store.select(selectAllHeroes);
   isLoading$ = this.store.select(isLoading);
 
   constructor(private store: Store<HeroState>) {
+    this.init();
   }
 
   init() {

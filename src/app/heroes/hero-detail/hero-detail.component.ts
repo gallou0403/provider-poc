@@ -6,7 +6,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 @Component({
   selector: 'app-hero-detail',
   templateUrl: './hero-detail.component.html',
-  styleUrls: ['./hero-detail.component.css']
+  styleUrls: ['./hero-detail.component.css'],
+  providers: [
+    HeroDetailFacade
+  ]
 })
 export class HeroDetailComponent {
   form$ = this.facade.form$;
@@ -15,7 +18,6 @@ export class HeroDetailComponent {
   constructor(private facade: HeroDetailFacade,
               private router: Router,
               private route: ActivatedRoute) {
-    this.facade.init();
   }
 
   get isNew(): boolean {

@@ -7,9 +7,7 @@ import {HeroDetailForm} from "./hero-detail.form";
 import {detailHeroCreate, detailHeroDelete, detailHeroPageEnter, detailHeroUpdate} from "../state/hero.actions";
 import {Hero} from "../../data-access/heroes/hero.model";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class HeroDetailFacade {
   form$ = this.store.select(selectDetailHero).pipe(
     map(result => {
@@ -20,6 +18,7 @@ export class HeroDetailFacade {
   isLoading$ = this.store.select(isLoading);
 
   constructor(private store: Store<HeroState>) {
+    this.init();
   }
 
   init() {

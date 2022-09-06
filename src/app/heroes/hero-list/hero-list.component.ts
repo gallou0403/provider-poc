@@ -5,6 +5,9 @@ import {HeroListFacade} from "./hero-list.facade";
   selector: 'app-hero-list',
   templateUrl: './hero-list.component.html',
   styleUrls: ['./hero-list.component.css'],
+  providers: [
+    HeroListFacade
+  ]
 })
 export class HeroListComponent {
   heroes$ = this.facade.heroes$;
