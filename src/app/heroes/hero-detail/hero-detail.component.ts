@@ -27,6 +27,7 @@ export class HeroDetailComponent {
   submit(form: HeroDetailForm) {
     if (form.invalid) {
       console.warn('form is invalid', form);
+      return;
     }
 
     if (this.isNew) {
