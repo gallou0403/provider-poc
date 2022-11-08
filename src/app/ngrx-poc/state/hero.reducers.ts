@@ -76,7 +76,8 @@ const heroUpdatedReducer = on(HeroActions.detailHeroUpdateSuccess, (state, actio
   return heroAdapter.updateOne({
     id: action.detailHero.id,
     changes: {
-      name: action.detailHero.name
+      name: action.detailHero.name,
+      status: action.detailHero.status
     }
   }, state as HeroState);
 });

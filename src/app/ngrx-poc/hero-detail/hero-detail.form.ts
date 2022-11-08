@@ -5,7 +5,8 @@ export class HeroDetailForm extends FormGroup {
   constructor(private seed?: Hero) {
     super({
       id: new FormControl(seed?.id),
-      name: new FormControl(seed?.name || '', Validators.required)
+      name: new FormControl(seed?.name || '', Validators.required),
+      status: new FormControl(seed?.status, Validators.required)
     })
   }
 

@@ -1,7 +1,8 @@
 import {HeroService} from "./infrastructure/hero.service";
 import {map, Observable} from "rxjs";
-import {Hero} from "./hero.model";
+import {Hero, HeroStatus} from "./hero.model";
 import {Injectable} from "@angular/core";
+import {HeroDto} from "./infrastructure/hero-dto.model";
 
 @Injectable()
 export class HeroDataService {
@@ -20,8 +21,8 @@ export class HeroDataService {
     return this.dataService.createHero(hero) as Observable<Hero>;
   }
 
-  updateHero(id: number, name: string): Observable<Hero> {
-    return this.dataService.updateHero(id, name);
+  updateHero(id: number, name: string, status: HeroStatus): Observable<Hero> {
+    return this.dataService.updateHero(id, name, status) as Observable<Hero>
   }
 
   removeHero(id: number): Observable<void> {

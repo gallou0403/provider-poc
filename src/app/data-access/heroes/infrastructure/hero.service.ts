@@ -3,6 +3,7 @@ import {MOCK_HEROES} from "./mock-heroes";
 import {map, Observable, switchMap, throwError, timer} from "rxjs";
 import {clone, remove, update, without} from "ramda";
 import {HeroDto} from "./hero-dto.model";
+import {HeroStatus} from "../hero.model";
 
 const TIMEOUT = 500;
 
@@ -51,11 +52,11 @@ export class HeroService {
     );
   }
 
-  updateHero(id: number, name: string): Observable<HeroDto> {
+  updateHero(id: number, name: string, status: HeroStatus): Observable<HeroDto> {
     console.log('remote call: updateHero');
     return timer(TIMEOUT).pipe(
       map(() => {
-        const updated = {id, name};
+        const updated = {id, name, status};
         const index = this._heroes.findIndex(x => x.id === id);
         this._heroes = update(index, updated, this._heroes);
         return updated;

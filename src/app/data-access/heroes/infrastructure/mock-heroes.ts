@@ -4,21 +4,26 @@ export const MOCK_HEROES: HeroDto[] = [
   {
     id: 0,
     name: 'Superman',
+    status: 'active'
   },
   {
     id: 1,
-    name: 'Batman'
+    name: 'Batman',
+    status: 'active'
   },
   {
     id: 2,
-    name: 'Spiderman'
+    name: 'Spiderman',
+    status: 'active'
   },
   {
     id: 3,
-    name: 'Wonder Woman'
+    name: 'Wonder Woman',
+    status: 'retired'
   },
   {
     id: 4,
-    name: 'Aquaman'
+    name: 'Aquaman',
+    status: 'deceased'
   }
 ];

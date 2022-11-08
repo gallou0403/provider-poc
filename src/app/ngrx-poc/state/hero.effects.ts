@@ -154,7 +154,7 @@ export class HeroEffects {
     this.actions$.pipe(
       ofType(DETAIL_HERO_UPDATE),
       concatMap(({detailHero}: {detailHero: Hero}) => {
-        return this.heroService.updateHero(detailHero.id, detailHero.name).pipe(
+        return this.heroService.updateHero(detailHero.id, detailHero.name, detailHero.status).pipe(
           map((detailHero) => detailHeroUpdateSuccess({detailHero})),
           catchError(error => of(detailHeroUpdateError({error})))
         )
