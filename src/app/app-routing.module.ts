@@ -6,23 +6,23 @@ import {RouterModule} from "@angular/router";
     RouterModule.forRoot([
       {
         path: 'a',
-        loadChildren: () => import('./provider-test/lazy-a/lazy-a.module').then(m => m.LazyAModule)
+        loadChildren: () => import('./dynamic-providers-poc/lazy-a/lazy-a.module').then(m => m.LazyAModule)
       },
       {
         path: 'b',
-        loadChildren: () => import('./provider-test/lazy-b/lazy-b.module').then(m => m.LazyBModule)
+        loadChildren: () => import('./dynamic-providers-poc/lazy-b/lazy-b.module').then(m => m.LazyBModule)
       },
       {
         path: 'c',
-        loadChildren: () => import('./provider-test/lazy-c/lazy-c.module').then(m => m.LazyCModule)
+        loadChildren: () => import('./dynamic-providers-poc/lazy-c/lazy-c.module').then(m => m.LazyCModule)
       },
       {
         path: 'heroes',
-        loadChildren: () => import('./heroes/hero-list/hero-list.module').then(m => m.HeroListModule)
+        loadChildren: () => import('./ngrx-poc/hero-list/hero-list.module').then(m => m.HeroListModule)
       },
       {
         path: 'heroes/hero',
-        loadChildren: () => import('./heroes/hero-detail/hero-detail.module').then(m => m.HeroDetailModule)
+        loadChildren: () => import('./ngrx-poc/hero-detail/hero-detail.module').then(m => m.HeroDetailModule)
       },
     ])
   ],
