@@ -1,3 +1,28 @@
 mat-form-field {
   display: block;
 }
+
+.theme--active {
+  background-color: lightgreen;
+}
+
+.theme--retired {
+  background-color: darkgray;
+}
+
+.theme--deceased {
+  background-color: indianred;
+}
+
+.status-menu__item {
+  display: flex;
+  align-items: center;
+}
+
+.status-menu__item__label {
+  margin-right: 16px;
+}
+
+.status-menu__item__icon {
+  margin: 0 0 0 auto !important;
+}

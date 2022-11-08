@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {HeroDetailFacade} from "./hero-detail.facade";
 import {HeroDetailForm} from "./hero-detail.form";
 import {ActivatedRoute, Router} from "@angular/router";
+import {HERO_STATUS_LABEL, HERO_STATUSES} from "../../data-access/heroes/hero.model";
 
 @Component({
   selector: 'app-hero-detail',
@@ -14,6 +15,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class HeroDetailComponent {
   form$ = this.facade.form$;
   isLoading$ = this.facade.isLoading$;
+
+  heroStatuses = HERO_STATUSES;
 
   constructor(private facade: HeroDetailFacade,
               private router: Router,
