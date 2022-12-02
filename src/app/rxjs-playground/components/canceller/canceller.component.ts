@@ -46,8 +46,15 @@ export class CancellerComponent implements OnInit, OnDestroy {
     this.destroyed.next();
   }
 
+  /*
+      BIG CHANGE. INDEX CAN'T REALLY BE USED BECAUSE ITEMS IN THE ARRAY ARE REMOVED
+      WHICH MEANS INDEX CHANGES AS THE USER CANCELS UPLOADS
+   */
+
   cancelFile(file: UploadFile) {
     console.log('cancelling', file.name);
+    // open a dialog here if needed, then emit subject
+    // only if user confirms in dialog
     this.cancel.next(file);
   }
 
@@ -55,6 +62,7 @@ export class CancellerComponent implements OnInit, OnDestroy {
     return this.cancel.pipe(
       filter(equals(file)),
       tap(() => {
+        // can use Array.filter instead of without
         this.docList = without([file], this.docList);
       })
     );
@@ -68,6 +76,7 @@ export class CancellerComponent implements OnInit, OnDestroy {
     const foundIndex = this.docList.findIndex(equals(file));
 
     if (foundIndex > -1) {
+      // can use Array.slice instead of update
       this.docList = update(foundIndex, {
         ...file,
         isLoading,
@@ -79,13 +88,17 @@ export class CancellerComponent implements OnInit, OnDestroy {
   mockUpload() {
     this.docList = [];
 
-    MOCK_FILES.forEach((file, index) => {
+    // this function is slightly different from yours because we're using a mock list
+    // we always "upload" the same 10 files
+    MOCK_FILES.forEach((file) => {
       this.docList.push(file);
 
       this.service.uploadFile(file).pipe(
+        // finalize tells us that there is no memory leak
         finalize(() => console.log('finished file', file.name)),
         takeUntil(this.cancelledFile$(file)),
       ).subscribe(() => {
+        // this is the same pattern found in file upload component
         this.service.uploadStatusEvent.next({
           file: file,
           isLoading: false,
