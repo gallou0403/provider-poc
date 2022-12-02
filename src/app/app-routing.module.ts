@@ -24,6 +24,10 @@ import {RouterModule} from "@angular/router";
         path: 'heroes/hero',
         loadChildren: () => import('./ngrx-poc/hero-detail/hero-detail.module').then(m => m.HeroDetailModule)
       },
+      {
+        path: 'rxjs',
+        loadChildren: () => import('./rxjs-playground/rxjs-playground.module').then(m => m.RxjsPlaygroundModule)
+      }
     ])
   ],
   exports: [

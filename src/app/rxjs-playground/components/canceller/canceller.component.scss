@@ -1,0 +1,20 @@
+.list {
+  width: 300px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid gray;
+
+    &__name {
+      margin-right: 15px
+    }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+  }
+
+}
