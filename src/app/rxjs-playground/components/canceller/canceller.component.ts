@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CancellerService} from "./canceller.service";
 import { UploadFile } from './file.class';
+import {Subject, takeUntil} from "rxjs";
 
 const MOCK_FILES = [
   new UploadFile('MOCK FILE 1'),
@@ -20,19 +21,54 @@ const MOCK_FILES = [
   templateUrl: './canceller.component.html',
   styleUrls: ['./canceller.component.scss']
 })
-export class CancellerComponent implements OnInit {
+export class CancellerComponent implements OnInit, OnDestroy {
   docList: UploadFile[] = []
+
+  private destroyed: Subject<void> = new Subject();
 
   constructor(private service: CancellerService) { }
 
   ngOnInit(): void {
+    this.service.uploadStatusEvent.pipe(
+      takeUntil(this.destroyed)
+    ).subscribe((evt) => {
+      this.updateDocumentList(
+        evt.index,
+        evt.isLoading,
+        evt.isUploaded
+      );
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed.next();
+  }
+
+  updateDocumentList(
+    index: number,
+    isLoading: boolean,
+    isSuccess: boolean,
+  ) {
+    const documentList: UploadFile[] = [...this.docList];
+    documentList[index].isLoading = isLoading;
+    documentList[index].isSuccess = isSuccess;
+    documentList[index] = { ...documentList[index] };
+    this.docList = documentList;
   }
 
   mockUpload() {
     this.docList = [];
 
-    MOCK_FILES.forEach(file => {
+    MOCK_FILES.forEach((file, index) => {
       this.docList.push(file);
+
+      this.service.uploadFile(file).subscribe(() => {
+        this.service.uploadStatusEvent.next({
+          index: index,
+          isLoading: false,
+          isUploaded: true
+        })
+      });
     })
   }
 }
