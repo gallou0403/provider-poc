@@ -1,5 +1,7 @@
+import {UploadFile} from "./file.class";
+
 export interface UploadStatusEvent {
-  index: number;
+  file: UploadFile;
   isLoading: boolean;
   isUploaded: boolean;
 }

@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CancellerService} from "./canceller.service";
 import { UploadFile } from './file.class';
-import {Subject, takeUntil} from "rxjs";
+import {filter, finalize, Subject, switchMap, takeUntil, tap} from "rxjs";
+import {equals, remove, update, without} from "ramda";
 
 const MOCK_FILES = [
   new UploadFile('MOCK FILE 1'),
@@ -25,6 +26,7 @@ export class CancellerComponent implements OnInit, OnDestroy {
   docList: UploadFile[] = []
 
   private destroyed: Subject<void> = new Subject();
+  private cancel: Subject<UploadFile> = new Subject();
 
   constructor(private service: CancellerService) { }
 
@@ -33,7 +35,7 @@ export class CancellerComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed)
     ).subscribe((evt) => {
       this.updateDocumentList(
-        evt.index,
+        evt.file,
         evt.isLoading,
         evt.isUploaded
       );
@@ -44,16 +46,34 @@ export class CancellerComponent implements OnInit, OnDestroy {
     this.destroyed.next();
   }
 
+  cancelFile(file: UploadFile) {
+    console.log('cancelling', file.name);
+    this.cancel.next(file);
+  }
+
+  cancelledFile$(file: UploadFile) {
+    return this.cancel.pipe(
+      filter(equals(file)),
+      tap(() => {
+        this.docList = without([file], this.docList);
+      })
+    );
+  }
+
   updateDocumentList(
-    index: number,
+    file: UploadFile,
     isLoading: boolean,
     isSuccess: boolean,
   ) {
-    const documentList: UploadFile[] = [...this.docList];
-    documentList[index].isLoading = isLoading;
-    documentList[index].isSuccess = isSuccess;
-    documentList[index] = { ...documentList[index] };
-    this.docList = documentList;
+    const foundIndex = this.docList.findIndex(equals(file));
+
+    if (foundIndex > -1) {
+      this.docList = update(foundIndex, {
+        ...file,
+        isLoading,
+        isSuccess
+      }, this.docList);
+    }
   }
 
   mockUpload() {
@@ -62,9 +82,12 @@ export class CancellerComponent implements OnInit, OnDestroy {
     MOCK_FILES.forEach((file, index) => {
       this.docList.push(file);
 
-      this.service.uploadFile(file).subscribe(() => {
+      this.service.uploadFile(file).pipe(
+        finalize(() => console.log('finished file', file.name)),
+        takeUntil(this.cancelledFile$(file)),
+      ).subscribe(() => {
         this.service.uploadStatusEvent.next({
-          index: index,
+          file: file,
           isLoading: false,
           isUploaded: true
         })

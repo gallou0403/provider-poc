@@ -6,7 +6,7 @@
     <div class="list__item__actions" *ngIf="file.isLoading">
       <mat-spinner mode="indeterminate" [diameter]="15" [strokeWidth]="2" color="primary"></mat-spinner>
       <button mat-icon-button color="warn">
-        <mat-icon [inline]="true">delete_forever</mat-icon>
+        <mat-icon [inline]="true" (click)="cancelFile(file)">delete_forever</mat-icon>
       </button>
     </div>
   </mat-list-item>
