@@ -5,7 +5,8 @@ import {HERO_STATUS_LABEL, HeroStatus} from "../../data-access/heroes/hero.model
   name: 'heroStatusLabel'
 })
 export class HeroStatusLabelPipe implements PipeTransform {
-  transform(status: HeroStatus | string): string {
+  transform(status?: HeroStatus | string): string {
+    if (!status) return '';
     return HERO_STATUS_LABEL[status as HeroStatus];
   }
 }

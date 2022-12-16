@@ -11,13 +11,15 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {HeroStatusLabelPipe} from "./hero-status-label.pipe";
+import { HeroStatusControlComponent } from './hero-status-control/hero-status-control.component';
 
 
 
 @NgModule({
   declarations: [
     HeroDetailComponent,
-    HeroStatusLabelPipe
+    HeroStatusLabelPipe,
+    HeroStatusControlComponent
   ],
   imports: [
     CommonModule,

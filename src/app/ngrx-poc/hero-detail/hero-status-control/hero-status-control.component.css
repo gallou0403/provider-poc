@@ -1,0 +1,11 @@
+.theme--active {
+  background-color: lightgreen;
+}
+
+.theme--retired {
+  background-color: darkgray;
+}
+
+.theme--deceased {
+  background-color: indianred;
+}

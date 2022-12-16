@@ -10,22 +10,8 @@
       <input formControlName="name" matInput>
       <mat-error>Name is required</mat-error>
     </mat-form-field>
-    <mat-chip-list *ngIf="form.get('status') as statusCtrl">
-      <mat-chip [matMenuTriggerFor]="menu"
-                class="mock-class theme--{{statusCtrl.value}} another-mock-class">
-        {{statusCtrl.value | heroStatusLabel}}
-        <mat-icon>arrow_drop_down</mat-icon>
-      </mat-chip>
-      <mat-menu #menu="matMenu" class="status-menu">
-        <button mat-menu-item class="status-menu__item"
-                *ngFor="let status of heroStatuses"
-                (click)="statusCtrl.setValue(status)">
-          <span class="status-menu__item__label">{{status  | heroStatusLabel}}</span>
-          <mat-icon class="status-menu__item__icon"
-                    *ngIf="statusCtrl.value === status">done</mat-icon>
-        </button>
-      </mat-menu>
-    </mat-chip-list>
+
+    <app-hero-status-control formControlName="status"></app-hero-status-control>
     <div>
       <button mat-button color="warn" type="button" (click)="delete(form.value.id)" *ngIf="!isNew">Delete</button>
       <button mat-button color="accent" type="button" (click)="cancel(form)">Cancel</button>

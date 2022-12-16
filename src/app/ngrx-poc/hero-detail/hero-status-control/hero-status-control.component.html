@@ -1,0 +1,17 @@
+<mat-chip-list>
+  <mat-chip [matMenuTriggerFor]="menu"
+            class="mock-class theme--{{value}} another-mock-class">
+    <span *ngIf="value">{{value | heroStatusLabel}}</span>
+    <span *ngIf="!value">Status</span>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </mat-chip>
+  <mat-menu #menu="matMenu" class="status-menu">
+    <button mat-menu-item class="status-menu__item"
+            *ngFor="let status of heroStatuses"
+            (click)="setValue(status)">
+      <span class="status-menu__item__label">{{status  | heroStatusLabel}}</span>
+      <mat-icon class="status-menu__item__icon"
+                *ngIf="value === status">done</mat-icon>
+    </button>
+  </mat-menu>
+</mat-chip-list>
