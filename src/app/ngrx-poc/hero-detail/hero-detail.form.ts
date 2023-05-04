@@ -10,6 +10,10 @@ export class HeroDetailForm extends FormGroup {
     })
   }
 
+  override get(controlName: string): FormControl {
+    return super.get(controlName) as FormControl;
+  }
+
   override reset() {
     this.patchValue(this.seed || {});
   }

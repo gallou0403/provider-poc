@@ -1,5 +1,5 @@
 import {Component, forwardRef, OnInit} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from "@angular/forms";
 import {HERO_STATUSES, HeroStatus} from "../../../data-access/heroes/hero.model";
 
 @Component({
@@ -18,17 +18,17 @@ export class HeroStatusControlComponent implements ControlValueAccessor {
   propagateChanges: any;
 
   value?: HeroStatus;
+  disabled?: boolean;
 
   heroStatuses = HERO_STATUSES;
 
-  // how values get in
-  // how values get out
-  // disabled state
-  // invalid state
+  constructor(private control: NgControl) {
+  }
 
   registerOnChange(fn: any) {
     this.propagateChanges = fn;
   }
+
   registerOnTouched(fn: any) {  }
 
   writeValue(value: HeroStatus) {
@@ -41,5 +41,9 @@ export class HeroStatusControlComponent implements ControlValueAccessor {
     }
 
     this.value = nextValue;
+  }
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
   }
 }

@@ -1,5 +1,5 @@
 <mat-chip-list>
-  <mat-chip [matMenuTriggerFor]="menu"
+  <mat-chip [matMenuTriggerFor]="menu" [disabled]="disabled"
             class="mock-class theme--{{value}} another-mock-class">
     <span *ngIf="value">{{value | heroStatusLabel}}</span>
     <span *ngIf="!value">Status</span>

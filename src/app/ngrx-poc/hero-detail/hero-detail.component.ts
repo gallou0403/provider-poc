@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HeroDetailFacade} from "./hero-detail.facade";
 import {HeroDetailForm} from "./hero-detail.form";
 import {ActivatedRoute, Router} from "@angular/router";
+import {map, Observable, Subject, takeUntil} from "rxjs";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-hero-detail',
@@ -27,6 +29,11 @@ export class HeroDetailComponent {
   submit(form: HeroDetailForm) {
     if (form.invalid) {
       console.warn('form is invalid', form);
+
+      Object.values(form.controls).forEach(control => {
+        control.markAsDirty();
+      })
+
       return;
     }
 

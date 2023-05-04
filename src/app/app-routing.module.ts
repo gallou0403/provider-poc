@@ -27,6 +27,10 @@ import {RouterModule} from "@angular/router";
       {
         path: 'rxjs',
         loadChildren: () => import('./rxjs-playground/rxjs-playground.module').then(m => m.RxjsPlaygroundModule)
+      },
+      {
+        path: 'lazy-dialog',
+        loadChildren: () => import('./lazy-dialog/lazy-dialog.module').then(m => m.LazyDialogModule)
       }
     ])
   ],
