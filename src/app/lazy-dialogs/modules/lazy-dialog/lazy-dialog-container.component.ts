@@ -10,7 +10,9 @@ import {LazyDialogComponent} from "./lazy-dialog.component";
 export class LazyDialogContainerComponent implements OnInit {
 
   constructor(private dialog: MatDialog) {
-    console.log('constructed')
+    console.log(`
+TODO: use aux route to load the dialog. use a route parameter to determine the tab.
+    `);
   }
 
   ngOnInit(): void {
