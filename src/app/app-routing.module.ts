@@ -30,9 +30,11 @@ import {RouterModule} from "@angular/router";
       },
       {
         path: 'lazy-dialog',
-        loadChildren: () => import('./lazy-dialog/lazy-dialog.module').then(m => m.LazyDialogModule)
+        loadChildren: () => import('./lazy-dialogs/lazy-dialogs.module').then(m => m.LazyDialogsModule)
       }
-    ])
+    ], {
+      enableTracing: true
+    })
   ],
   exports: [
     RouterModule

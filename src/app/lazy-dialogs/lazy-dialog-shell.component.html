@@ -1,0 +1,16 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="./page-a">Lazy Page A</a>
+      <a mat-list-item routerLink="./page-b">Lazy Page B</a>
+      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs'], lazyDialogTab: ['lazy-tab-a']}}]">Lazy Tab A</a>
+      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs'], lazyDialogTab: ['lazy-tab-b']}}]">Lazy Tab B</a>
+      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs'], lazyDialogTab: ['lazy-tab-c']}}]">Lazy Tab C</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<router-outlet name="globalDialog"></router-outlet>
