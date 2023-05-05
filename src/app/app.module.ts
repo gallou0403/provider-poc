@@ -6,6 +6,7 @@ import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument(),
     StoreRouterConnectingModule.forRoot(),
+    HttpClientModule
   ],
   bootstrap: [AppComponent],
 })

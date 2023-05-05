@@ -7,6 +7,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatIconModule} from "@angular/material/icon";
+import { IpAddressComponent } from './components/ip-address/ip-address.component';
 
 @NgModule({
   imports: [
@@ -15,11 +16,12 @@ import {MatIconModule} from "@angular/material/icon";
     MatButtonModule,
     MatListModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
   ],
   declarations: [
     CancellerComponent,
-    RxjsContainerComponent
+    RxjsContainerComponent,
+    IpAddressComponent
   ]
 })
 export class RxjsPlaygroundModule {
