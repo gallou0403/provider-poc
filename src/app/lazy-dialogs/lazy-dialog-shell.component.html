@@ -3,9 +3,9 @@
     <mat-nav-list>
       <a mat-list-item routerLink="./page-a">Lazy Page A</a>
       <a mat-list-item routerLink="./page-b">Lazy Page B</a>
-      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs', '0']}}]">Lazy Tab A</a>
-      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs', '1']}}]">Lazy Tab B</a>
-      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs', '2']}}]">Lazy Tab C</a>
+      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs', 'lazy-tab-a']}}]">Lazy Tab A</a>
+      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs', 'lazy-tab-b']}}]">Lazy Tab B</a>
+      <a mat-list-item [relativeTo]="route" [routerLink]="[{ outlets: { globalDialog: ['tabs', 'lazy-tab-c']}}]">Lazy Tab C</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

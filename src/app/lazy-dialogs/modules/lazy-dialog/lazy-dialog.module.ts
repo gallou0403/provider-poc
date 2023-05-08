@@ -5,9 +5,6 @@ import { LazyDialogContainerComponent } from './lazy-dialog-container.component'
 import {MatTabsModule} from "@angular/material/tabs";
 import {LazyDialogRoutingModule} from "./lazy-dialog-routing.module";
 import {MatDialogModule} from "@angular/material/dialog";
-import {LazyDialogTabAModule} from "./lazy-dialog-tab-a/lazy-dialog-tab-a.module";
-import {LazyDialogTabBModule} from "./lazy-dialog-tab-b/lazy-dialog-tab-b.module";
-import {LazyDialogTabCModule} from "./lazy-dialog-tab-c/lazy-dialog-tab-c.module";
 
 
 
@@ -21,9 +18,6 @@ import {LazyDialogTabCModule} from "./lazy-dialog-tab-c/lazy-dialog-tab-c.module
     MatTabsModule,
     MatDialogModule,
     LazyDialogRoutingModule,
-    LazyDialogTabAModule,
-    LazyDialogTabBModule,
-    LazyDialogTabCModule
   ]
 })
 export class LazyDialogModule { }

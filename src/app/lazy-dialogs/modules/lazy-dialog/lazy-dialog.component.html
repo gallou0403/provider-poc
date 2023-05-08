@@ -1,13 +1,8 @@
-<mat-tab-group dynamicHeight
-               [selectedIndex]="activeIndex$ | async"
-               (selectedIndexChange)="onTabChange($event)">
-  <mat-tab label="Lazy Tab A">
-    <app-lazy-dialog-tab-a></app-lazy-dialog-tab-a>
-  </mat-tab>
-  <mat-tab label="Lazy Tab B">
-    <app-lazy-dialog-tab-b></app-lazy-dialog-tab-b>
-  </mat-tab>
-  <mat-tab label="Lazy Tab C">
-    <app-lazy-dialog-tab-c></app-lazy-dialog-tab-c>
-  </mat-tab>
-</mat-tab-group>
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <a mat-tab-link *ngFor="let tab of tabs | keyvalue"
+     [routerLink]="['./', tab.key]"
+     [active]="isTabActive(tab.key)"> {{tab.value}} </a>
+</nav>
+<mat-tab-nav-panel #tabPanel>
+  <router-outlet></router-outlet>
+</mat-tab-nav-panel>
