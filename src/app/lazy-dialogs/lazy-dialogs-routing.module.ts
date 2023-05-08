@@ -23,21 +23,6 @@ import {LazyDialogShellComponent} from "./lazy-dialog-shell.component";
             loadChildren: () => import('./modules/lazy-dialog').then(m => m.LazyDialogModule)
           },
           {
-            path: 'lazy-tab-a',
-            outlet: 'lazyDialogTab',
-            loadChildren: () => import('./modules/lazy-dialog/lazy-dialog-tab-a/lazy-dialog-tab-a.module').then(m => m.LazyDialogTabAModule)
-          },
-          {
-            path: 'lazy-tab-b',
-            outlet: 'lazyDialogTab',
-            loadChildren: () => import('./modules/lazy-dialog/lazy-dialog-tab-b/lazy-dialog-tab-b.module').then(m => m.LazyDialogTabBModule)
-          },
-          {
-            path: 'lazy-tab-c',
-            outlet: 'lazyDialogTab',
-            loadChildren: () => import('./modules/lazy-dialog/lazy-dialog-tab-c/lazy-dialog-tab-c.module').then(m => m.LazyDialogTabCModule)
-          },
-          {
             path: '',
             redirectTo: 'page-a',
             pathMatch: 'full'

@@ -4,17 +4,20 @@ import {RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
 
 @NgModule({
-  declarations: [
-    LazyDialogTabAComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: LazyDialogTabAComponent
-      }
-    ])
-  ],
+    declarations: [
+        LazyDialogTabAComponent
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild([
+            {
+                path: '',
+                component: LazyDialogTabAComponent
+            }
+        ])
+    ],
+    exports: [
+        LazyDialogTabAComponent
+    ]
 })
 export class LazyDialogTabAModule {}

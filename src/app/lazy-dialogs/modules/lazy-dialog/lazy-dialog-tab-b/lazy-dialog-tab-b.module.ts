@@ -17,6 +17,9 @@ import {RouterModule} from "@angular/router";
         component: LazyDialogTabBComponent
       }
     ])
+  ],
+  exports: [
+    LazyDialogTabBComponent
   ]
 })
 export class LazyDialogTabBModule { }
