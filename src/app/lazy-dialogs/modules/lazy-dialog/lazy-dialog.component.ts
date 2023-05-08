@@ -18,6 +18,9 @@ export class LazyDialogComponent {
   }
 
   isTabActive(tab: string) {
+    // this is obtuse, but it's predictable. We're in the "parent" route of the tabs,
+    // so the first child is going to be the tab, and that tab's url is going to be
+    // the segment of the url that we're interested in
     return this.route.snapshot.firstChild?.url?.[0].path === tab;
   }
 }
